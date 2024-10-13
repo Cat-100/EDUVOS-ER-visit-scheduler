@@ -1,4 +1,4 @@
-class Patient:
+class Patient(object):
     ''' 
     Class that represents a single `patient` in the private clinic
     
