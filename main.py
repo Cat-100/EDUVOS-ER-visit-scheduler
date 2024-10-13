@@ -15,6 +15,7 @@ def main():
     priorityQueue.enqueue(patient2)
     priorityQueue.enqueue(patient3)
 
+
    
     priorityQueue.dequeue()
 

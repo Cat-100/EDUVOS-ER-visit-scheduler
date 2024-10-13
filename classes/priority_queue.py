@@ -1,6 +1,7 @@
 from classes.patient import Patient
 from typing import List
 from utils.helpers.helper_functions import SHelperFunctions
+
 class PriorityQueue:
     ''' 
     Priority Queue that utilizes the Binary Heap tree structure to queue, dequeue, 
@@ -22,17 +23,26 @@ class PriorityQueue:
     - But quering it to find patients with a higher priority level will be slow, nodes are linked based on a reference to the new node, meaning that to find the highest priority level, the structure will need to be looped through multiple times, creating a time complexity potentially highter than O(n)
     - It needs to be improved upon. 
     
+    Binary Heap:
+    - Commonly utilized in priotizy queues.
+    - A max-heap is a Binary Heap whereby the largest value is moved up in the hierarchy, to the root of the tree.
+    - Meaning, its results in a better time complexity of O(nlog(n)) as the highest prioity is at the top of the queue.
 
     **Binary Tree Rules:**
-    - Insertion: All elements must be inserted on the tree and the heapified, meaning that it needs to be moved to the top or bottom based on the priority level.
+    - **Insertion:** All elements must be inserted on the tree and the heapified, meaning that it needs to be moved to the top or bottom based on the priority level.
     In this case, patients with a higher priority level, > 1, will be moved up the binary tree.
-
-    **Node Structure:**
-    Node (n) || Child (2n) || Child (2n + 1)
-
+    - **Extraction:** The first element is removed, due to it being the highest priority. 
+        The last element is removed at the tail and replaces the root of the tree. 
+        There is now an issue, its not normalized to the property of the binary heap.
+        Deheapification need to take place, the lower priority must now be moved down the tree based on a higher priority below the lower priority.
+        The lower priority node is then compared to its childern, swithing the node if one of its children have a lower priority.
+    
     **Properties:**
     - `root`: The root of the binary tree, top most node of the tree.
     - `nodes`: The list of nodes in the binary tree, can be a whole new node or a child to a node. 
+    
+    **Node Structure:**
+    Node (n) || Child (2n) || Child (2n + 1)
     '''
 
     # ------------------------------ Functions ------------------------------- #
@@ -46,6 +56,9 @@ class PriorityQueue:
         Ádds a Patient to the queue. 
         
         Will heapify based on the patient's priority level. 5 being the most sever.
+
+        **Parameters:**
+        - `patient`: a patient to be added to the queue
         '''
         # Add patient to the end of the list
         self.nodes.append(patient)
@@ -54,7 +67,12 @@ class PriorityQueue:
         self._heapify(len(self.nodes) - 1)
 
     def _heapify(self, index: int) -> None:
-        '''Moves current node on the tree based on the priority level'''
+        '''
+        Moves current node on the tree based on the priority level, ensuring that the binary heap's properties are maintained.
+        
+        **Parameters:**
+        - `index`: The starting node indext to beging heapifying
+        '''
         # Relevant indices
         parentIndex = self.determineParentIndex(index)
         childIndex = index
@@ -71,6 +89,15 @@ class PriorityQueue:
             parentIndex = self.determineParentIndex(index)
 
     def determineParentIndex(self , index: int) -> int:
+        '''
+        Çalculates the parent index based on the index provided.
+        
+        **Parameters:**
+        - `index`: The current index of a node. 
+
+        **Returns:**
+        - The index of the node's parent
+        '''
         return (index - 1)//2
     
     def dequeue(self) -> Patient: 
@@ -112,23 +139,21 @@ class PriorityQueue:
         **Parameters:**
         - `index`: The node's index provided, the starting point of the deheapify.
         '''
-        # get the length of the nodes
+        # Get the length of the nodes
         nodeLength = len(self.nodes)
         while  index < nodeLength:
             # Determine indices. Note: + 1 was added to normalize the array
             leftChildIndex = index * 2 + 1  # 2n
+            if leftChildIndex > nodeLength:
+                break # Break to ensure the case where the child might not exist, meaning the second child won't exist either so stop the process then
+            
             rightChildIndex = (index * 2) + 2 # 2n + 1
             largestIndex = index # Start with the supplied index
 
             # Left Child: 2n
-            if (leftChildIndex < nodeLength and self.nodes[leftChildIndex].priorityLevel > self.nodes[largestIndex].priorityLevel):
-                # Move the main index to the child moved
-                largestIndex = leftChildIndex
-                
+            largestIndex = self._determineLargestIndex(nodeLength , leftChildIndex , largestIndex)
             # Right Child: 2n + 1
-            if (rightChildIndex < nodeLength and  self.nodes[rightChildIndex].priorityLevel > self.nodes[largestIndex].priorityLevel):
-                # Move the main index to the child moved
-                largestIndex = rightChildIndex
+            largestIndex = self._determineLargestIndex(nodeLength, rightChildIndex, largestIndex )
 
             # Swap elements if there was a change in the largest index, which indicates that a child had a higher priority
             if  largestIndex != index:
@@ -138,6 +163,23 @@ class PriorityQueue:
             else: 
                 # Break as the index has not changed, meaning that the current node is the highest node
                 break
+            
+    def _determineLargestIndex(self, nodeLength: int , childIndex: int , index : int ,  ) -> int:
+        ''' 
+        Returns the largest index based on the nodes provided by their indices.
+        
+        **Parameters:**
+        - `nodeLength`: The number of nodes, typically the self.nodes length.
+        - `childIndex`: The index of the child node of the parent node that will be compared. Can be left or right child node.
+        - `index`: The current node being assessed in the binary tree.
 
-
+        **Returns:**
+        - `index` (int): Returns an index, either the parent node's index or the child index as a failsafe 
+        '''
+        if (childIndex < nodeLength and  self.nodes[childIndex].priorityLevel > self.nodes[index].priorityLevel):
+                # Move the main index to the child moved
+                return index
+        
+        # Account for edge case
+        return childIndex
 
