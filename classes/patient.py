@@ -12,12 +12,14 @@ class Patient(object):
 
     # --------------------------- Functions ---------------------------------- #
 
-    def __init__(self , patientName, patientSurname, patientIdNumber) -> None:
+    def __init__(self , patientName : str, patientSurname: str, patientIdNumber: str) -> None:
         ''' Class Constructor '''
-        self.name  = patientName
-        self.surname = patientSurname
-        self.idNumber = patientIdNumber
+        self.name: str = patientName
+        self.surname : str = patientSurname
+        self.idNumber: str = patientIdNumber
+        self.priorityLevel : int = None
+        self.status : str = ""
 
     def display_details(self):
         ''' Method that neatly prints the patient details '''
-        print(f"Name:\t{self.name}\nSurname:\t{self.surname}\nID Number:\t${self.idNumber}")
+        print(f"Name:\t\t{self.name}\nSurname:\t{self.surname}\nID Number:\t${self.idNumber}")
