@@ -74,7 +74,7 @@ class PriorityQueue:
         - `index`: The starting node indext to beging heapifying
         '''
         # Relevant indices
-        parentIndex = self.determineParentIndex(index)
+        parentIndex = self._determineParentIndex(index)
         childIndex = index
 
         # Compare the child node with the parent node and swap if needed
@@ -86,9 +86,9 @@ class PriorityQueue:
             # Move up to the parent node
             index = parentIndex  
             # Calculate the new parent index
-            parentIndex = self.determineParentIndex(index)
+            parentIndex = self._determineParentIndex(index)
 
-    def determineParentIndex(self , index: int) -> int:
+    def _determineParentIndex(self , index: int) -> int:
         '''
         Çalculates the parent index based on the index provided.
         
@@ -144,7 +144,7 @@ class PriorityQueue:
         while  index < nodeLength:
             # Determine indices. Note: + 1 was added to normalize the array
             leftChildIndex = index * 2 + 1  # 2n
-            if leftChildIndex > nodeLength:
+            if leftChildIndex >= nodeLength:
                 break # Break to ensure the case where the child might not exist, meaning the second child won't exist either so stop the process then
             
             rightChildIndex = (index * 2) + 2 # 2n + 1
@@ -178,8 +178,8 @@ class PriorityQueue:
         '''
         if (childIndex < nodeLength and  self.nodes[childIndex].priorityLevel > self.nodes[index].priorityLevel):
                 # Move the main index to the child moved
-                return index
+                return childIndex
         
         # Account for edge case
-        return childIndex
+        return index
 
