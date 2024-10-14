@@ -3,7 +3,7 @@ from classes.patient import Patient
 
 class Scheduler(object):
     ''' 
-    Scheduler manages the priority queue. 
+    Scheduler manages the priority queue of the Clinic. 
     
     Allowing for:
     - Adding of patients to the queue
