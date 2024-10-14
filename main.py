@@ -8,7 +8,7 @@ def main():
     patient2 = Patient("Saskian" , "Louw" ,"0303175087087")
     patient2.priorityLevel = 5
     patient3 = Patient("Anikin" , "Louw" , "0458039850")
-    patient3.priorityLevel = 5
+    patient3.priorityLevel = 2
 
     priorityQueue : PriorityQueue = PriorityQueue()
     priorityQueue.enqueue(patient1)
