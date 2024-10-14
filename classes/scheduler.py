@@ -1,5 +1,6 @@
 from classes.priority_queue import PriorityQueue
 from classes.patient import Patient
+import random
 
 class Scheduler(object):
     ''' 
@@ -29,9 +30,12 @@ class Scheduler(object):
         **Parameters:**
         - `patient`: The [Patient] that will be added to the [PriorityQueue]
         '''
+
+        # Testing
+        patient.priorityLevel = random.randint(1 , 5)
         self._priority_queue.enqueue(patient)
 
-    def retrieve_next_patietn(self) -> Patient:
+    def retrieve_next_patient(self) -> Patient:
         ''' 
         Gets the highest prioriy patient from the priority queue.
         
@@ -47,6 +51,6 @@ class Scheduler(object):
         displays each of the patient details that are currently waiting in the queue
         '''
         for patient  in self._priority_queue:
-            print(patient.display_details())
+            patient.display_details()
 
     

@@ -50,6 +50,8 @@ class PriorityQueue:
         ''' Class Constructor '''
         # Create list of nodes to hold all the elements
         self.nodes : List[Patient] = []
+        # Iterator count
+        self._current = 0
 
     def enqueue(self, patient : Patient) -> None:
         '''
@@ -182,4 +184,20 @@ class PriorityQueue:
         
         # Account for edge case
         return index
+    
+    # ----------------------------- Iteration Methods ------------------------------- #
+
+    def __iter__(self):
+        ''' Returns an iterator object for the class '''
+        self._current = 0 # Reset count if the class needs to be iterated again
+        return self
+    
+    def __next__(self):
+        ''' Iterator: Returns the next patient in the queue '''
+        if self._current >= len(self.nodes):
+            raise StopIteration # Stop the iteration if the _current idex is higher than the length of the nodes
+        patient : Patient = self.nodes[self._current]
+        self._current += 1
+        return patient
+
 
