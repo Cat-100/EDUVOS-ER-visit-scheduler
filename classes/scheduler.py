@@ -20,6 +20,7 @@ class Scheduler(object):
         ''' Class constructor '''
         self._priority_queue = PriorityQueue()
 
+
     def add_patient(self, patient: Patient):
         ''' 
         Adds a `Patient` to the `Priority Queue` 
@@ -52,5 +53,14 @@ class Scheduler(object):
         '''
         for patient  in self._priority_queue:
             patient.display_details()
+
+    def consult_patient(self, patient: Patient , status: str) -> None:
+        ''' Places a status on the patient and loads them into the `consulted_patients` to save`'''
+        # Assign status
+        patient.status = status
+
+        # TODO: Save consulted patient in text file
+        
+
 
     
