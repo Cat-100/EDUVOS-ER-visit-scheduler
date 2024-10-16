@@ -32,5 +32,12 @@ class AppDirectories(Enum):
     '''
     # Values
     PATIENTS = "assets/files/patients"
+    CONSULTED_PATIENTS = "assets/files/patients/consulted"
 
-
+class FileExtension(Enum):
+    '''
+    Save potential file extension to remain type save within the program
+    and provide centralize changing of data if need be
+    '''
+    # Values
+    TXT = ".txt"

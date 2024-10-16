@@ -2,8 +2,10 @@ from classes.priority_queue import PriorityQueue
 from classes.patient import Patient
 import random
 from models.file_operation_response import FileOperationResponse
-from utils.enums.enums import FileOperationalStatus
+from utils.enums.enums import FileOperationalStatus , AppDirectories , FileExtension
 from services.file_operations import FileOperations
+from utils.helpers.helper_functions import SHelperFunctions
+from pathlib import Path
 
 class Scheduler(object):
     ''' 
@@ -58,9 +60,27 @@ class Scheduler(object):
             patient.display_details()
 
     def consult_patient(self, patient: Patient , status: str) -> None:
-        ''' Places a status on the patient and loads them into the `consulted_patients` to save`'''
+        ''' 
+        Places a status on the patient and saves the consulted patient in the consulted patients folder
+        
+        **Parameters:**
+        - `patient`: The patient that will be consulted.
+        - `status`: The patient status given to the patient after consultation.
+        '''
         # Assign status
         patient.status = status
+
+        # Save the patient consulted
+        fileOperationResponse : FileOperationResponse  =  self._save_patient_consultation(patient)
+
+        # Return a message to make sure that the operation was successful
+        match fileOperationResponse.status:
+            case FileOperationalStatus.FAILED:
+                print(f"Patient consultation was not saved.\nUnexpected error occured. Please try again.") 
+            case FileOperationalStatus.STOPPED:
+                print(f"Patient consultation was not saved. The process was stopped:\n{fileOperationResponse.message}")
+            case FileOperationalStatus.SUCCESS:
+                print(f"Patient consulattion was saved successfully")
 
        
     def _save_patient_consultation(self, patient : Patient) -> FileOperationResponse:
@@ -74,11 +94,32 @@ class Scheduler(object):
         - [FileOperationResponse] to indicate if the patient was successfully saved.
         '''
         try:
-            file = "hello"
+            # Get the current date
+            currentDate = SHelperFunctions.get_current_date()
+
+            # Construct file name
+            fileName : str = f"{AppDirectories.CONSULTED_PATIENTS.value}/{currentDate}{FileExtension.TXT.value}"
+            
+            # Create file path object to check if the file exists 
+            file : Path = Path(fileName)
+
+            # Check if the file exists, 
+            # overwrite if it does not to make sure a new file is created at the start of each day
+            overwriteFile = False
+            if not file.exists():
+                overwriteFile = True
+            
+            # Write the patient to the file
+            return FileOperations.write_to_file(file , patient.display_as_consulted() , overwriteFile)
         except Exception as e:
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error: {e}")
         
+    # def read_consulted_patients(fileName: str) -> None:
+    #     try:
+
+    #     except Exception as e:
+    #         # Handle unexpected error
 
 
     

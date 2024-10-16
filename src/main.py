@@ -2,7 +2,6 @@ from classes.patient import Patient
 from classes.scheduler import Scheduler
 from services.file_operations import FileOperations
 from models.file_operation_response import FileOperationResponse 
-from utils.helpers.helper_functions import SHelperFunctions
 
 def main():
     '''Entry point of the application'''
@@ -22,6 +21,6 @@ def main():
 
     FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"] , overwriteFile=True)
     fileOperationResponse : FileOperationResponse =  FileOperations.read_from_txt_file("debug/testing.txt")
-    print(SHelperFunctions.get_current_date())
+    
 # Start of the application
 main()
