@@ -1,6 +1,6 @@
 from classes.patient import Patient
 from classes.scheduler import Scheduler
-
+from services.file_operations import FileOperations
 def main():
     '''Entry point of the application'''
     patient1 = Patient("Paulien" , "hello" , "09384")
@@ -13,6 +13,9 @@ def main():
     scheduler.add_patient(patient2)
     scheduler.add_patient(patient3)
     
-    scheduler.display_patients_waiting()
+    #scheduler.display_patients_waiting()
+
+    FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"])
+
 # Start of the application
 main()

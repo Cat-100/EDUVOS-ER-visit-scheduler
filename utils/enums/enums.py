@@ -1,9 +1,9 @@
 from enum import Enum, auto
 
 
-class FileOperation(Enum):
+class FileMode(Enum):
     ''' 
-    Denotes file operations when opening files
+    Denotes file mode handling files
 
     - `Write:` Opens a file for writing, will create the file if it does not exist.
     - `Read:` Opens a file for Read-only, allow for reading of a file but not editing the file.
