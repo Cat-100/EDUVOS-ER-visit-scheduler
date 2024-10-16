@@ -1,5 +1,5 @@
 from typing import List, Any
-
+from datetime import date
 
 class SHelperFunctions:
     '''Contains all helper functions for the application'''
@@ -35,5 +35,15 @@ class SHelperFunctions:
         match value_type:
             case str:
                 return len(value) == 0 or value == ""
+
+    @staticmethod       
+    def get_current_date() -> str:
+        ''' 
+        Returns the calendar date in the form of yyyy-mm-dd without additional data such as time.
+        
+        **Returns**:
+        - A formatted date string, in the format of yyyy-mm-dd
+        '''
+        return date.today().strftime('%Y-%m-%d')
             
             
