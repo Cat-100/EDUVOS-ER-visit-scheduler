@@ -9,13 +9,14 @@ class FileOperations:
 
     # ----------------------------- Functions ------------------------------ #
     @staticmethod
-    def write_to_file(fileName:str, lines: List[str]) -> FileOperationResponse:
+    def write_to_file(fileName:str, lines: List[str] , overwriteFile : bool = False) -> FileOperationResponse:
         '''
         Write contents to a file specified
         
         **Parameters:**
         - `fileName`: The name of the file that should be written to.
         - `lines`: The content that should be written to the file.
+        - `overwriteFile`: Optional, whether to overwrite the file contents or append the contents to the file 
 
         **Returns:**
         - A [FileOperationResponse] to indicate the status of the file operation of writing to a file
@@ -30,8 +31,13 @@ class FileOperations:
             # Make sure the directory exists. Exists_ok to ensure that no error is thrown to allow the process to continue
             fileDirectory.mkdir(parents=True, exist_ok=True)
 
-            # Make sure the file exists
-            with file.open(FileMode.WRITE.value, encoding="utf-8") as openedFile:
+            # Deterime to use a file mode to append or overwrite the file
+            fileMode : FileMode = FileMode.APPEND
+
+            if overwriteFile == True:
+                fileMode = FileMode.WRITE
+
+            with file.open(fileMode.value, encoding="utf-8") as openedFile:
                 for line in lines:
                     openedFile.write(f"{line}\n")
 

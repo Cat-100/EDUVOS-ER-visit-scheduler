@@ -16,7 +16,7 @@ def main():
     
     #scheduler.display_patients_waiting()
 
-    FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"])
+    FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"] , overwriteFile=True)
     fileOperationResponse : FileOperationResponse =  FileOperations.read_from_txt_file("debug/testing.txt")
     print(fileOperationResponse.payload)
 # Start of the application
