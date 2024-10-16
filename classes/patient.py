@@ -22,4 +22,4 @@ class Patient(object):
 
     def display_details(self):
         ''' Method that neatly prints the patient details '''
-        print(f"Name:\t\t{self.name}\nSurname:\t{self.surname}\nID Number:\t${self.idNumber}")
+        print(f"Name:\t\t{self.name}\nSurname:\t{self.surname}\nID Number:\t{self.idNumber}")

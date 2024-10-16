@@ -1,6 +1,7 @@
 from classes.patient import Patient
 from classes.scheduler import Scheduler
 from services.file_operations import FileOperations
+from models.file_operation_response import FileOperationResponse 
 def main():
     '''Entry point of the application'''
     patient1 = Patient("Paulien" , "hello" , "09384")
@@ -16,6 +17,7 @@ def main():
     #scheduler.display_patients_waiting()
 
     FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"])
-
+    fileOperationResponse : FileOperationResponse =  FileOperations.read_from_txt_file("debug/testing.txt")
+    print(fileOperationResponse.payload)
 # Start of the application
 main()
