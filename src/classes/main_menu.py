@@ -6,29 +6,29 @@ class MainMenu(object):
     ''' 
     Object class that represents the main menu of the ER application. 
     
-    Contains the scheduler, business and GUI logic to allow the user to:
-    - Add patients to the Scheduler
+    Contains the _scheduler, business and GUI logic to allow the user to:
+    - Add patients to the _scheduler
     - Retrieve Patients in the queue. Consult them after being retrieved
     - Display all patients in the waiting queue
     - Read a Patient Consultation File
     - Exit the application
     
     **Properties:**
-    - `stop_application`: Sentinal value that stops the application when its value becomes `True`
-    - `scheduler`: The [Scheduler] object that manages the priority queue of patients.
+    - `_stop_application`: Sentinal value that stops the application when its value becomes `True`
+    - `_scheduler`: The [scheduler] object that manages the priority queue of patients.
     '''
 
     # --------------------------- Functions ----------------------------- #
 
     def __init__(self) -> None:
         '''Constructor for the class'''
-        self.stop_application = False 
-        self.scheduler = Scheduler()
+        self._stop_application = False 
+        self._scheduler = Scheduler()
 
     def start(self):
         '''Starts the application, running the main menu until the user exists the application.'''
         # Continue displaying, running the application, until terminate or stop application is selected
-        while self.stop_application == False:
+        while self._stop_application == False:
             # Display menu
             self._display_main_menu()
 
@@ -40,13 +40,13 @@ class MainMenu(object):
 
     def _display_main_menu(self) -> None:
         '''Prints the main menu for the user to use and select a option'''
-        print("Clinic ER visit scheduler")
+        print("Clinic ER Visit Scheduler")
         print("------------------------------------------")
         print("(1) Add Patient to Schedule.")
         print("(2) Retrieve Next Patient.")
-        print("(4) Display All Patients Waiting.")
-        print("(5) Read Patient Consultation File")
-        print("(6) Exit application")
+        print("(3) Display All Patients Waiting.")
+        print("(4) Read Patient Consultation File")
+        print("(5) Exit application")
         print()
 
     def _get_user_menu_choice(self) -> MainMenuOption:
@@ -57,8 +57,9 @@ class MainMenu(object):
             try:
                 # Attempt to convert input to an int and get the correct Menu Option
                 menu_choice = int(menu_choice_str)
+            
                 # Convert int choice to enum value
-                menu_choice = MainMenuOption.from_int(menu_choice)
+                menu_choice = MainMenuOption.from_value(menu_choice)
 
                 # Handle edge case where the value is not in the range of the options provided
                 if menu_choice is None:
@@ -88,5 +89,5 @@ class MainMenu(object):
     # =========================== Main Menu Option Functions ============================== #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''
-        self.stop_application = True
+        self._stop_application = True
         print("Application successfully terminated")

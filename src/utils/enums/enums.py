@@ -1,31 +1,25 @@
 from enum import Enum, auto
-from typing import Any
+from typing import Any , Dict
 
 class ExtendedEnum(Enum):
     '''Extended Abstract Enum class to enable additional methods on enums'''
     
     # --------------------------- Functions --------------------------- #
     @classmethod
-    def from_int(cls, value: int) -> Any:
-        ''' 
-        Map function that returns the corresponding value from the provided int.
-        
-        **Parameter:**
-        - `value`: The value of the Enum provided that will be mapped.
-
-        **Returns:**
-        - The value of an enum, for example FileMode
-        '''
-        if value < 1 or value > len(cls):
-            return None # Return None as int value is out-of-bounds of the enum
-        return list[cls][value-1]
-
+    def as_value_map(cls) -> Dict[Any, 'ExtendedEnum']:
+        '''Returns a Dict of [Enum.value, Enum]'''
+        return {member.value : member for member in cls}
 
     @classmethod
     def values(cls):
         '''Returns the enum values'''
         return list(map(lambda c: c.value, cls))
     
+    @classmethod
+    def from_value(cls, value: Any) -> 'ExtendedEnum':
+        value_map = cls.as_value_map()
+        return value_map.get(value, None)
+
 class FileMode(Enum):
     ''' 
     Denotes file mode handling files
@@ -79,4 +73,24 @@ class MainMenuOption(ExtendedEnum):
     READ_PATIENT_CONSULTATION_FILE = auto()
     EXIT_APPLICATION = auto()
 
+    @classmethod
+    def from_int(cls, value: int) -> Any:
+        ''' 
+        Map function that returns the corresponding value from the provided int.
+        
+        **Parameter:**
+        - `value`: The value of the Enum provided that will be mapped.
+
+        **Returns:**
+        - The value of an enum, for example FileMode
+        '''
+
+        if value < 1 or value > len(cls):
+            return None # Return None as int value is out-of-bounds of the enum
+        
+        for classValue in cls:
+            if (value == classValue.value):
+                return classValue
+
+        
 
