@@ -127,7 +127,7 @@ class Scheduler(object):
             file = Path(fileName)
             # Ensure that the file provided does not include other directories.
             # It must be the same directory path as [AppDirectories.CONSULTED_PATIENTS]
-            if not FileOperations.are_directory_paths_equal(AppDirectories.CONSULTED_PATIENTS.value, fileName):
+            if not FileOperations.are_directory_paths_equal(AppDirectories.CONSULTED_PATIENTS.value, file):
                 print("Cannot read file. The consultation directory paths are not the same.")
                 return
 
