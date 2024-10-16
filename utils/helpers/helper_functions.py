@@ -18,7 +18,15 @@ class SHelperFunctions:
 
     @staticmethod
     def is_empty(value: Any) -> bool:
-        '''Returns a bool to indicate if the `value` is empty or not. True for empty'''
+        '''
+        Returns a bool to indicate if the `value` is empty or not. True for empty
+        
+        **Parameters:**
+        - `value`: Any value which could be a list, string, or set Any variable
+        
+        **Returns:**
+        - A bool to indicate if the value is empty.
+        '''
         value_type : type = type(value) 
         
         if (value_type is List):
