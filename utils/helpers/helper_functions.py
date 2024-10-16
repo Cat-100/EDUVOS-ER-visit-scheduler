@@ -6,6 +6,14 @@ class SHelperFunctions:
     
     @staticmethod
     def swap_element_in_list(lst : List , original_index : int, swap_index: int  ) -> None:
+        '''
+        Swaps two elements in a list based on the indices provided
+        
+        **Parameters:**
+        - `lst`: The list where the elements will be swapped.
+        - `original_index`: The initial index that will be swapped with the swap element
+        - `swap_index`: The swap index that will be swapped with the original element in the list.
+        '''
         lst[original_index] , lst[swap_index] = lst[swap_index] , lst[original_index]
 
     @staticmethod
