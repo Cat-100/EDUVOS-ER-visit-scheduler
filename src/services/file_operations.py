@@ -56,7 +56,7 @@ class FileOperations:
 
         **Return:**
         - A [FileOperationResponse] is returned to indicate the status of the reading operatoin. 
-        - A `payload` will be provided in the response status is `SUCCESS`.        
+        - A `payload` will be provided if the response status is `SUCCESS`.        
         '''
         try:
             # Create Path object
