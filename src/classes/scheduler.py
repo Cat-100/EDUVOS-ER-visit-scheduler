@@ -115,7 +115,7 @@ class Scheduler(object):
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error: {e}")
         
-    def read_consulted_patients(fileName: str) -> None:
+    def read_consulted_patients(self, fileName: str) -> None:
         ''' 
         Reads and displays the file contents of the file provided. Typically the patient consultation file.
         
@@ -123,11 +123,43 @@ class Scheduler(object):
         - `fileName`: The consultation file name that should be checked. Must not have a different directory as [AppDirectories.CONSULTED_PATIENTS.value]
         '''
         try:
+            # Create path object to compare
+            file = Path(fileName)
             # Ensure that the file provided does not include other directories.
-            # It must be the same directory path as 
-            print("test")
+            # It must be the same directory path as [AppDirectories.CONSULTED_PATIENTS]
+            if not FileOperations.are_directory_paths_equal(AppDirectories.CONSULTED_PATIENTS.value, fileName):
+                print("Cannot read file. The consultation directory paths are not the same.")
+                return
+
+            # Directory paths match, attempt to read the file
+            fileOperationResponse: FileOperationResponse  = self._read_consulted_patients_file(fileName)
+
+            # Process the response
+            match fileOperationResponse.status:
+                case FileOperationalStatus.FAILED:
+                    print(f"Could not read patient consultation file, {file.name}: Please try again")
+                case FileOperationalStatus.STOPPED:
+                    print(f"Reading Patient consultation file, {file.name}, was stopped:\n{fileOperationResponse.message}")
+                case FileOperationalStatus.SUCCESS:
+                    print(f"Successfully read patient consultation file, {file.name}:\n\n{fileOperationResponse.payload}")
         except Exception as e:
             # Handle unexpected error
             print(f"Could not read patient consultation file. Unexpected error occured: {e}")
+
+    def _read_consulted_patients_file(self, fileName: str) -> FileOperationResponse:
+        '''
+        Attempts to read the consulted patients file and returns a response
+        
+        **Parameters:**
+        - `fileName`: File name representing the file that must be read
+
+        **Returns:**
+        - [FileOperationResponse] to indicate the operation status and the contents of the file.
+        '''
+        try:
+            return FileOperations.read_from_txt_file(fileName)
+        except Exception as e:
+            # Handle unexpected error
+            return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error occured: {e}")
 
     
