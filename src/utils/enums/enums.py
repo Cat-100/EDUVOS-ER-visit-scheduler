@@ -16,11 +16,16 @@ class ExtendedEnum(Enum):
         **Returns:**
         - The value of an enum, for example FileMode
         '''
-        try:
-            return list[cls][value-1]
-        except IndexError:
-            raise ValueError(f"No valid value found in enum values: {value}")
+        if value < 1 or value > len(cls):
+            return None # Return None as int value is out-of-bounds of the enum
+        return list[cls][value-1]
 
+
+    @classmethod
+    def values(cls):
+        '''Returns the enum values'''
+        return list(map(lambda c: c.value, cls))
+    
 class FileMode(Enum):
     ''' 
     Denotes file mode handling files
