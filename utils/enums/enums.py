@@ -25,5 +25,12 @@ class FileOperationalStatus(Enum):
     FAILED = auto()
     STOPPED = auto()
 
+class AppDirectories(Enum):
+    '''
+    Directory paths for the application to ensure type safety when saving files throughout the application
+    -  `Patients`: File Folder to save all the patients that have been consulted.
+    '''
+    # Values
+    PATIENTS = "assets/files/patients"
 
 
