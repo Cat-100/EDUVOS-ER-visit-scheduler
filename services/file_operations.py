@@ -1,5 +1,5 @@
 from utils.enums.enums import FileMode, FileOperationalStatus
-from classes.file_operation_response import FileOperationResponse
+from models.file_operation_response import FileOperationResponse
 from typing import List
 from pathlib import Path
 import os
@@ -36,3 +36,6 @@ class FileOperations:
         except Exception as e:
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED , f"Unexpected Error: {e}"); 
+
+   # @staticmethod
+    #def read_from_file(fileName : str) -> 
