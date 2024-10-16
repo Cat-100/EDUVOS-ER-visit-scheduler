@@ -1,14 +1,29 @@
 from utils.enums.enums import MainMenuOption
-import sys
+from classes.scheduler import Scheduler
+
 
 class MainMenu(object):
-    ''' Object class that represents the main menu of the ER application'''
+    ''' 
+    Object class that represents the main menu of the ER application. 
+    
+    Contains the scheduler, business and GUI logic to allow the user to:
+    - Add patients to the Scheduler
+    - Retrieve Patients in the queue. Consult them after being retrieved
+    - Display all patients in the waiting queue
+    - Read a Patient Consultation File
+    - Exit the application
+    
+    **Properties:**
+    - `stop_application`: Sentinal value that stops the application when its value becomes `True`
+    - `scheduler`: The [Scheduler] object that manages the priority queue of patients.
+    '''
 
     # --------------------------- Functions ----------------------------- #
 
     def __init__(self) -> None:
         '''Constructor for the class'''
-        self.stop_application = False # Sentinal variable to manage when to stop the main menu from continuing.
+        self.stop_application = False 
+        self.scheduler = Scheduler()
 
     def start(self):
         '''Starts the application, running the main menu until the user exists the application.'''
@@ -29,9 +44,9 @@ class MainMenu(object):
         print("------------------------------------------")
         print("(1) Add Patient to Schedule.")
         print("(2) Retrieve Next Patient.")
-        print("(3) Display All Patients Waiting.")
-        print("(4) Read Patient Consultation File")
-        print("(5) Exit application")
+        print("(4) Display All Patients Waiting.")
+        print("(5) Read Patient Consultation File")
+        print("(6) Exit application")
         print()
 
     def _get_user_menu_choice(self) -> MainMenuOption:
@@ -56,8 +71,8 @@ class MainMenu(object):
                 # Handle case where the user provided a input that was not valid
                 print("Invalid Input. Please select an option from the menu as a number.\nEx. 1")
 
-    def _handle_menu_option_selected(self, menu_option: MainMenuOption):
-        '''Invokes certain process based on the '''
+    def _handle_menu_option_selected(self, menu_option: MainMenuOption) -> None:
+        '''Invokes certain process based on the Main Menu Option provided'''
         match menu_option:
             case MainMenuOption.ADD_PATIENT_TO_SCHEDULE:
                 pass
