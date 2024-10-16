@@ -22,4 +22,8 @@ class Patient(object):
 
     def display_details(self):
         ''' Method that neatly prints the patient details '''
-        print(f"Name:\t\t{self.name}\nSurname:\t{self.surname}\nID Number:\t{self.idNumber}")
+        print(f"Name:\t\t{self.name}\nSurname:\t{self.surname}\nID Number:\t{self.idNumber}\nPriority Level: {self.priorityLevel}")
+
+    def display_as_consulted(self):
+        ''' Method that neatly prints the patient details in a text file format that can easily be read'''
+        return f"\t{self.name} {self.surname}\n---------------------------------\nID Number: {self.idNumber}\nStatus:\n{self.status}"

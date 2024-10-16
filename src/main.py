@@ -4,9 +4,12 @@ from services.file_operations import FileOperations
 from models.file_operation_response import FileOperationResponse 
 def main():
     '''Entry point of the application'''
-    patient1 = Patient("Paulien" , "hello" , "09384")
+    patient1 = Patient("Paulien" , "Louw" , "09384")
+    patient1.status = "Fell on their head, no fully recovered"
     patient2 = Patient("Saskian" , "Louw" ,"0303175087087")
     patient3 = Patient("Anikin" , "Louw" , "0458039850")
+    print()
+    print(patient1.display_as_consulted())
 
     scheduler : Scheduler = Scheduler()
 

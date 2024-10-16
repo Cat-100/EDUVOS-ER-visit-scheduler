@@ -1,6 +1,9 @@
 from classes.priority_queue import PriorityQueue
 from classes.patient import Patient
 import random
+from models.file_operation_response import FileOperationResponse
+from utils.enums.enums import FileOperationalStatus
+from services.file_operations import FileOperations
 
 class Scheduler(object):
     ''' 
@@ -59,7 +62,22 @@ class Scheduler(object):
         # Assign status
         patient.status = status
 
-        # TODO: Save consulted patient in text file
+       
+    def _save_patient_consultation(self, patient : Patient) -> FileOperationResponse:
+        ''' 
+        Save a patient that was consulted
+        
+        **Parameters:**
+        - `patient`: The patient that was consulted, will be saved.
+
+        **Returns:**
+        - [FileOperationResponse] to indicate if the patient was successfully saved.
+        '''
+        try:
+            file = "hello"
+        except Exception as e:
+            # Handle unexpected error
+            return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error: {e}")
         
 
 
