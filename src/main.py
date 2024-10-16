@@ -2,6 +2,7 @@ from classes.patient import Patient
 from classes.scheduler import Scheduler
 from services.file_operations import FileOperations
 from models.file_operation_response import FileOperationResponse 
+from utils.enums.enums import MainMenuOption
 from pathlib import Path
 
 def main():
@@ -26,5 +27,6 @@ def main():
     FileOperations.write_to_file("debug/testing.txt" , ["Hello my name:" , "Is saskian louw"] , overwriteFile=True)
     fileOperationResponse : FileOperationResponse =  FileOperations.read_from_txt_file("debug/testing.txt")
     
+
 # Start of the application
 main()

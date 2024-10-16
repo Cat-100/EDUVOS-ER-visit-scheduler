@@ -1,5 +1,25 @@
 from enum import Enum, auto
+from typing import Any
 
+class ExtendedEnum(Enum):
+    '''Extended Abstract Enum class to enable additional methods on enums'''
+    
+    # --------------------------- Functions --------------------------- #
+    @classmethod
+    def from_int(cls, value: int) -> Any:
+        ''' 
+        Map function that returns the corresponding value from the provided int.
+        
+        **Parameter:**
+        - `value`: The value of the Enum provided that will be mapped.
+
+        **Returns:**
+        - The value of an enum, for example FileMode
+        '''
+        try:
+            return list[cls][value-1]
+        except IndexError:
+            raise ValueError(f"No valid value found in enum values: {value}")
 
 class FileMode(Enum):
     ''' 
@@ -41,3 +61,17 @@ class FileExtension(Enum):
     '''
     # Values
     TXT = ".txt"
+
+class MainMenuOption(ExtendedEnum):
+    '''
+    Enum mapping to the main menu options. 
+    Ensuring type safety when parsing and working with menu options
+    '''
+    # Values
+    ADD_PATIENT_TO_SCHEDULE = auto()
+    RETRIEVE_NEXT_PATIENT = auto()
+    DISPLAY_ALL_PAIENTS_WAITING = auto()
+    READ_PATIENT_CONSULTATION_FILE = auto()
+    EXIT_APPLICATION = auto()
+
+
