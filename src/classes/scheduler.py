@@ -115,11 +115,19 @@ class Scheduler(object):
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error: {e}")
         
-    # def read_consulted_patients(fileName: str) -> None:
-    #     try:
-
-    #     except Exception as e:
-    #         # Handle unexpected error
-
+    def read_consulted_patients(fileName: str) -> None:
+        ''' 
+        Reads and displays the file contents of the file provided. Typically the patient consultation file.
+        
+        **Parameters:**
+        - `fileName`: The consultation file name that should be checked. Must not have a different directory as [AppDirectories.CONSULTED_PATIENTS.value]
+        '''
+        try:
+            # Ensure that the file provided does not include other directories.
+            # It must be the same directory path as 
+            print("test")
+        except Exception as e:
+            # Handle unexpected error
+            print(f"Could not read patient consultation file. Unexpected error occured: {e}")
 
     

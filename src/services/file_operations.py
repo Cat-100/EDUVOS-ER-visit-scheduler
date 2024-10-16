@@ -75,3 +75,23 @@ class FileOperations:
         except Exception as e:
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED , f"Unexpected Error: {e}") 
+    
+    @staticmethod
+    def are_directory_paths_equal(rootDirectory : Path , filePath  : Path ) -> bool:
+        '''
+        Utility function that checks whether two directory paths are the same
+        Will take the parent of the file path so do not provide the directory path of the file.
+
+        **Parameters:**
+        - `rootDirectory`: The directory path that will be compared with the file path's directory path
+        - `filePath`: The entire file path of the file. Will be deconstructed to its directory to check if its equal
+
+        **Return:**
+        - A boolean to indicate if the directory paths are equal or not.
+        - True indicates that they are equal
+        - False indicates that they are not equal 
+        '''
+        # Get File directory path
+        fileDirectoryPath : Path = filePath.parent
+
+        return rootDirectory == fileDirectoryPath

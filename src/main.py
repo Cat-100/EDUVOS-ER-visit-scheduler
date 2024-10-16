@@ -2,6 +2,7 @@ from classes.patient import Patient
 from classes.scheduler import Scheduler
 from services.file_operations import FileOperations
 from models.file_operation_response import FileOperationResponse 
+from pathlib import Path
 
 def main():
     '''Entry point of the application'''
@@ -10,6 +11,9 @@ def main():
     patient2 = Patient("Saskian" , "Louw" ,"0303175087087")
     patient3 = Patient("Anikin" , "Louw" , "0458039850")
 
+    print()
+    file =  Path("test")
+    print(f"File directory: {file.parent}")
 
     scheduler : Scheduler = Scheduler()
 
