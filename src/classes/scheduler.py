@@ -71,16 +71,16 @@ class Scheduler(object):
         patient.status = status
 
         # Save the patient consulted
-        fileOperationResponse : FileOperationResponse  =  self._save_patient_consultation(patient)
+        return self._save_patient_consultation(patient)
 
         # Return a message to make sure that the operation was successful
-        match fileOperationResponse.status:
-            case FileOperationalStatus.FAILED:
-                print(f"Patient consultation was not saved.\nUnexpected error occured. Please try again.") 
-            case FileOperationalStatus.STOPPED:
-                print(f"Patient consultation was not saved. The process was stopped:\n{fileOperationResponse.message}")
-            case FileOperationalStatus.SUCCESS:
-                print(f"Patient consulattion was saved successfully")
+        # match fileOperationResponse.status:
+        #     case FileOperationalStatus.FAILED:
+        #         print(f"Patient consultation was not saved.\nUnexpected error occured. Please try again.") 
+        #     case FileOperationalStatus.STOPPED:
+        #         print(f"Patient consultation was not saved. The process was stopped:\n{fileOperationResponse.message}")
+        #     case FileOperationalStatus.SUCCESS:
+        #         print(f"Patient consulattion was saved successfully")
 
        
     def _save_patient_consultation(self, patient : Patient) -> FileOperationResponse:
@@ -115,12 +115,16 @@ class Scheduler(object):
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error: {e}")
         
-    def read_consulted_patients(self, fileName: str) -> None:
+    def read_consulted_patients(self, fileName: str) -> FileOperationResponse:
         ''' 
-        Reads and displays the file contents of the file provided. Typically the patient consultation file.
+        Reads and returns the file contents of the file provided as a payload in the [FileOperationResponse].
         
         **Parameters:**
         - `fileName`: The consultation file name that should be checked. Must not have a different directory as [AppDirectories.CONSULTED_PATIENTS.value]
+        
+        **Returns:**
+        - [FileOperationResponse] that indicates the operational status and the payload of the consulted patients file.
+        - Note: The payload will only be returned if the [OperationalStatus] is `SUCCESS`
         '''
         try:
             # Create path object to compare
@@ -132,16 +136,16 @@ class Scheduler(object):
                 return
 
             # Directory paths match, attempt to read the file
-            fileOperationResponse: FileOperationResponse  = self._read_consulted_patients_file(fileName)
+            return self._read_consulted_patients_file(fileName)
 
-            # Process the response
-            match fileOperationResponse.status:
-                case FileOperationalStatus.FAILED:
-                    print(f"Could not read patient consultation file, {file.name}: Please try again")
-                case FileOperationalStatus.STOPPED:
-                    print(f"Reading Patient consultation file, {file.name}, was stopped:\n{fileOperationResponse.message}")
-                case FileOperationalStatus.SUCCESS:
-                    print(f"Successfully read patient consultation file, {file.name}:\n\n{fileOperationResponse.payload}")
+            # # Process the response
+            # match fileOperationResponse.status:
+            #     case FileOperationalStatus.FAILED:
+            #         print(f"Could not read patient consultation file, {file.name}: Please try again")
+            #     case FileOperationalStatus.STOPPED:
+            #         print(f"Reading Patient consultation file, {file.name}, was stopped:\n{fileOperationResponse.message}")
+            #     case FileOperationalStatus.SUCCESS:
+            #         print(f"Successfully read patient consultation file, {file.name}:\n\n{fileOperationResponse.payload}")
         except Exception as e:
             # Handle unexpected error
             print(f"Could not read patient consultation file. Unexpected error occured: {e}")
