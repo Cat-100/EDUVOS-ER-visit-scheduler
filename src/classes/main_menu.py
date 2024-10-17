@@ -123,7 +123,11 @@ class MainMenu(object):
             return info
 
         
-    #def _get_patient_id_number() -> str:
+    def _get_patient_id_number(self) -> str:
+        # Get the Patient ID
+        patient_id = self._get_patient_info(STexts.add_patient_id_input)
+        if SHelperFunctions.is_empty(patient_id) == True : return ""
+        # Validate if the id number is correct
 
 
     def _add_patient_option(self) -> None:
@@ -137,7 +141,9 @@ class MainMenu(object):
         if SHelperFunctions.is_empty(patient_name) == True : return # Abort if empty
 
         # Get Patient ID Number 
-
+        patient_id : str = self._get_patient_id_number()
+        if SHelperFunctions.is_empty(patient_id) == True : return ""
+        
     def _abort_add_patient_process(self) -> None:
         '''Aborts the Add Patient Process'''
         self._stop_add_patient_process = True
