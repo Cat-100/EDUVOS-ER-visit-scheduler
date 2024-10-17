@@ -21,6 +21,6 @@ class STexts():
     add_patient_menu_abort_option = "(2) Abort"
     add_patient_abort_process = "Add Patient to Schedule was Aborted..."
     add_patient_name_input = "Enter Patient Name (Press Enter to Abort): "
-    add_patient_surname_input = "Enter Patient Suranem (Press Enter to Abort): "
+    add_patient_surname_input = "Enter Patient Surname (Press Enter to Abort): "
     add_patient_id_input = "Enter Patient ID (Press Enter to Abort): "
 

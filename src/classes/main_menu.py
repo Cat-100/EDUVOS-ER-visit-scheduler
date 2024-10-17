@@ -5,6 +5,7 @@ from utils.constants.texts import STexts
 from typing import List, TypeVar , Type , Optional
 from utils.helpers.helper_functions import SHelperFunctions
 from exceptions.exceptions import AbortProcess
+from utils.validators.validators import SValidators
 
 class MainMenu(object):
     ''' 
@@ -133,7 +134,15 @@ class MainMenu(object):
             if SHelperFunctions.is_empty(patient_id) : raise AbortProcess # Abort process if empty
             
             # Validate if the id number is correct
-
+            validate : str =  SValidators.validate_id_number(patient_id)
+            
+            # Display the error or continue
+            if (validate != None):
+                patient_id = None
+                print(validate)
+            else: 
+                # Return patient id if the id is valid
+                return patient_id
 
 
     def _add_patient_option(self) -> None:
@@ -141,15 +150,20 @@ class MainMenu(object):
         try:
             # Get the patient name
             patient_name : str = self._get_patient_info(STexts.add_patient_name_input)
-            if SHelperFunctions.is_empty(patient_name) == True : raise AbortProcess # Abort if empty
+            if SHelperFunctions.is_empty(patient_name) : raise AbortProcess # Abort if empty
             
             # Get the Patient Surname
             patient_surname : str = self._get_patient_info(STexts.add_patient_surname_input)
-            if SHelperFunctions.is_empty(patient_name) == True : raise AbortProcess # Abort if empty
+            if SHelperFunctions.is_empty(patient_surname)  : raise AbortProcess # Abort if empty
 
             # Get Patient ID Number 
             patient_id : str = self._get_patient_id_number()
-            if SHelperFunctions.is_empty(patient_id) == True : return ""
+            
+            # Consturct Patient Object
+            new_patient : Patient = Patient(patient_name , patient_surname, patient_id)
+
+            # Add patient to the scheduler
+            self._scheduler.add_patient(new_patient) 
         
         except AbortProcess:
             # Handle abort process
