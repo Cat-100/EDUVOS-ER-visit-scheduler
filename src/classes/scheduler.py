@@ -1,6 +1,5 @@
 from classes.priority_queue import PriorityQueue
 from classes.patient import Patient
-import random
 from models.file_operation_response import FileOperationResponse
 from utils.enums.enums import FileOperationalStatus , AppDirectories , FileExtension
 from services.file_operations import FileOperations
@@ -37,8 +36,6 @@ class Scheduler(object):
         - `patient`: The [Patient] that will be added to the [PriorityQueue]
         '''
 
-        # Testing
-        patient.priorityLevel = random.randint(1 , 5)
         self._priority_queue.enqueue(patient)
 
     def retrieve_next_patient(self) -> Patient:

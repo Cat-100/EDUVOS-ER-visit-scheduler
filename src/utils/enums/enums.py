@@ -63,6 +63,12 @@ class FileExtension(Enum):
     TXT = ".txt"
 
 # ========================= Menu Options ============================== #
+class OptionMenu(Enum):
+    '''Enum to manage the menus being used in the application'''
+    MAIN = auto()
+    ADD_PATIENT_TO_SCHEDULE = auto()
+    RETRIEVE_NEXT_PATIENT = auto()
+
 class MenuOption(ExtendedEnum):
     '''Abstract class to ensure type safety of menu options'''
     pass
@@ -85,4 +91,9 @@ class AddPatientMenuOption(MenuOption):
     ADD_PATIENT = auto()
     ABORT = auto()
         
-
+class RetrieveNextPatientMenuOption(MenuOption):
+    ''' Enum mapping for the add patient menu options'''
+    # Values
+    RETREIVE_AND_CONSULT_PATIENT = auto()
+    ABORT = auto()
+        

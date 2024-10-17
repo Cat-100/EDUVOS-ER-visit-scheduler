@@ -1,4 +1,4 @@
-from utils.enums.enums import MainMenuOption , MenuOption, AddPatientMenuOption
+from utils.enums.enums import *
 from classes.scheduler import Scheduler
 from classes.patient import Patient
 from utils.constants.texts import STexts
@@ -32,7 +32,7 @@ class MainMenu(object):
     def __init__(self) -> None:
         '''Constructor for the class'''
         self._stop_application = False 
-        self._stop_add_patient_process = False
+        self._stop_menu_process = False
         self._scheduler = Scheduler()
 
     def start(self):
@@ -40,26 +40,13 @@ class MainMenu(object):
         # Continue displaying, running the application, until terminate or stop application is selected
         while self._stop_application == False:
             # Display menu
-            self._display_main_menu()
+            self._display_chosen_option_menu(OptionMenu.MAIN)
 
             # Get User Choice
             menu_option_made : MainMenuOption = self._get_menu_choice(MainMenuOption , STexts.menu_choice_input) 
 
             # Handle the user choice made
             self._handle_menu_option_selected(menu_option_made)
-
-            
-
-    def _display_main_menu(self) -> None:
-        '''Prints the main menu for the user to use and select a option'''
-        print(STexts.menu_title)
-        print("------------------------------------------")
-        print(STexts.first_menu_option)
-        print(STexts.second_menu_option)
-        print(STexts.third_menu_option)
-        print(STexts.fourth_menu_option)
-        print(STexts.fifth_menu_option)
-        print()
 
     def _get_menu_choice(self , menu_type: Type[T] , prompt : str) -> T:
         '''Get the relative menu option'''
@@ -85,6 +72,29 @@ class MainMenu(object):
                 # Handle case where the user provided a input that was not valid
                 print(STexts.menu_choice_invalid_input)
 
+    def _display_chosen_option_menu(self , menu_type: OptionMenu ) -> None:
+        match menu_type:
+            case OptionMenu.MAIN:
+                '''Prints the main menu for the user to use and select a option'''
+                print(STexts.menu_title)
+                print("------------------------------------------")
+                print(STexts.first_menu_option)
+                print(STexts.second_menu_option)
+                print(STexts.third_menu_option)
+                print(STexts.fourth_menu_option)
+                print(STexts.fifth_menu_option)
+                print()
+            case OptionMenu.ADD_PATIENT_TO_SCHEDULE:
+                '''Displays a mini menu for adding a patient to the schedule'''
+                print(STexts.add_patient_to_schedule_title)
+                print(STexts.add_patient_menu_option_one)
+                print(STexts.add_patient_menu_abort_option)
+            case OptionMenu.RETRIEVE_NEXT_PATIENT:
+                '''Displays The Retrieve Next Patient Menu'''
+                print(STexts.retrieve_next_patient_title)
+                print(STexts.retrieve_next_menu_option_one)
+                print(STexts.retrieve_next_menu_option_two)
+
     def _handle_menu_option_selected(self, menu_option: T , patient: Optional[Patient] = None) -> None:
         '''Invokes certain process based on the Main Menu Option provided'''
         # Add spacing for readability
@@ -94,7 +104,7 @@ class MainMenu(object):
                 case MainMenuOption.ADD_PATIENT_TO_SCHEDULE:
                     self._start_add_patient_process()
                 case MainMenuOption.RETRIEVE_NEXT_PATIENT:
-                    pass
+                    self._start_retrieve_next_patient_process()
                 case MainMenuOption.DISPLAY_ALL_PAIENTS_WAITING:
                     pass
                 case MainMenuOption.READ_PATIENT_CONSULTATION_FILE:
@@ -108,15 +118,24 @@ class MainMenu(object):
                 case AddPatientMenuOption.ADD_PATIENT:
                     self._add_patient_option()
                 case AddPatientMenuOption.ABORT:
-                    self._abort_add_patient_process()
-            
+                    self._abort_menu_process()
+        if isinstance(menu_option , RetrieveNextPatientMenuOption):
+            # Retrieve and consult patient options
+            print()
+            match menu_option:
+                case RetrieveNextPatientMenuOption.RETREIVE_AND_CONSULT_PATIENT:
+                    pass
+                case RetrieveNextPatientMenuOption.ABORT:
+                    self._abort_menu_process()
+
+
+    def _abort_menu_process(self) -> None:
+        '''Aborts a Currently Active Menu Process'''
+        self._stop_menu_process = True
+        print(STexts.add_patient_abort_process)
+    
     # =========================== Main Menu Option Functions ============================== #
-    #  ------------------------------ Add Patient to Schedule --------------------------- #
-    def _display_add_patient_to_schedule_menu(self) -> None:
-        '''Displays a mini menu for adding a patient to the schedule'''
-        print(STexts.add_patient_to_schedule_title)
-        print(STexts.add_patient_menu_option_one)
-        print(STexts.add_patient_menu_abort_option)
+    #  ---------------------- Add Patient to Schedule --------------------------- #
 
     def _get_patient_info(self, prompt: str) -> str:
         info: str = None
@@ -161,26 +180,20 @@ class MainMenu(object):
             
             # Consturct Patient Object
             new_patient : Patient = Patient(patient_name , patient_surname, patient_id)
-
+            
             # Add patient to the scheduler
             self._scheduler.add_patient(new_patient) 
         
         except AbortProcess:
             # Handle abort process
             return
-
-    def _abort_add_patient_process(self) -> None:
-        '''Aborts the Add Patient Process'''
-        self._stop_add_patient_process = True
-        print(STexts.add_patient_abort_process)
-
+        
     def _start_add_patient_process(self) -> None:
         '''Starts the Add Patient Process'''
-        # Declare global to handle the patient process
-        self._stop_add_patient_process = False
-        while not self._stop_add_patient_process:
+        self._stop_menu_process = False
+        while not self._stop_menu_process:
             # Display Patient Menu Options
-            self._display_add_patient_to_schedule_menu()
+            self._display_chosen_option_menu(OptionMenu.ADD_PATIENT_TO_SCHEDULE)
 
             # Get menu option
             menu_option : AddPatientMenuOption = self._get_menu_choice(AddPatientMenuOption , STexts.menu_choice_input)
@@ -188,7 +201,41 @@ class MainMenu(object):
             # Handle the menu option selected
             self._handle_menu_option_selected(menu_option)
 
-    #  ------------------------------ Exit Application --------------------------- #
+    # -------------------- Retrieve Next Patient ---------------------- #
+    def _retrieve_and_consult_patient(self) -> None:
+        try:
+            # Retrieve patient
+            retrieved_patient = self._scheduler.retrieve_next_patient()
+
+            # Display the patient details for the doctor to use and consult the patient
+            print(retrieved_patient.display_details())
+
+            # Get status.
+            patient_status : str  = self._get_patient_info(STexts.patient_status_input)
+            if SHelperFunctions.is_empty(patient_status) : raise AbortProcess
+
+            # Add the status to the 
+        except AbortProcess:
+            # Reinsert the retrieved patient if the process was aborted
+            self._scheduler.add_patient(retrieved_patient)
+        except IndexError as e:
+            print("No patients available to be consulted.")
+            
+
+    def _start_retrieve_next_patient_process(self) -> None:
+        '''Starts the Next Patient process'''
+        self._stop_menu_process = False
+        while not self._stop_menu_process:
+            # Display Patient Menu Options
+            self._display_chosen_option_menu(OptionMenu.RETRIEVE_NEXT_PATIENT)
+
+            # Get menu option
+            menu_option : AddPatientMenuOption = self._get_menu_choice(AddPatientMenuOption , STexts.menu_choice_input)
+            
+            # Handle the menu option selected
+            self._handle_menu_option_selected(menu_option)
+        
+    #  ---------------------- Exit Application --------------------------- #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''
         self._stop_application = True

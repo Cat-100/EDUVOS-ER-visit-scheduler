@@ -24,3 +24,8 @@ class STexts():
     add_patient_surname_input = "Enter Patient Surname (Press Enter to Abort): "
     add_patient_id_input = "Enter Patient ID (Press Enter to Abort): "
 
+    # Retrieve Next Patient
+    retrieve_next_patient_title = "-- Retrieve Next Patient --"
+    retrieve_next_menu_option_one = "(1) Retrieve and Consult Patient"
+    retrieve_next_menu_option_two = "(2) Abort"
+    patient_status_input = "Enter Patient Status(Press Enter to Abort)"
