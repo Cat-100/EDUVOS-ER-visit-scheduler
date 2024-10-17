@@ -75,6 +75,7 @@ class MainMenu(object):
 
     def _display_chosen_option_menu(self , menu_type: OptionMenu ) -> None:
         match menu_type:
+            # ========== Main ============
             case OptionMenu.MAIN:
                 '''Prints the main menu for the user to use and select a option'''
                 print(STexts.menu_title)
@@ -85,21 +86,34 @@ class MainMenu(object):
                 print(STexts.fourth_menu_option)
                 print(STexts.fifth_menu_option)
                 print()
+
+            # ========= Add Patient To Schedule =============
             case OptionMenu.ADD_PATIENT_TO_SCHEDULE:
                 '''Displays a mini menu for adding a patient to the schedule'''
                 print(STexts.add_patient_to_schedule_title)
                 print(STexts.add_patient_menu_option_one)
                 print(STexts.add_patient_menu_abort_option)
+
+            # ========= Retrieve Next Patient ============
             case OptionMenu.RETRIEVE_NEXT_PATIENT:
                 '''Displays The Retrieve Next Patient Menu'''
                 print(STexts.retrieve_next_patient_title)
                 print(STexts.retrieve_next_menu_option_one)
                 print(STexts.retrieve_next_menu_option_two)
+
+            # ========== Display All Patients Waiting ============
             case OptionMenu.DISPLAY_ALL_PATIENT_WAITING:
-                '''Displays All Patients Waiting '''
+                ''' Displays All Patients Waiting '''
                 print(STexts.display_all_patients_waiting_title)
                 print(STexts.display_all_patients_waiting_menu_option_one)
                 print(STexts.display_all_patients_waiting_menu_option_two)
+
+            # ======= Read Patient Consultation File =========
+            case OptionMenu.READ_PATIENT_CONSULTATION_FILE:
+                ''' Displays the Read Patient Consultation file '''
+                print(STexts.read_patient_consultation_file_title)
+                print(STexts.read_patient_consultation_file_menu_option_one)
+                print(STexts.read_patient_consultation_file_menu_option_two)
 
     def _start_menu_process( self,  option_menu: OptionMenu, menu_option_type: Type[MenuOption]):
         '''Start menu process based'''
@@ -127,7 +141,7 @@ class MainMenu(object):
                 case MainMenuOption.DISPLAY_ALL_PAIENTS_WAITING:
                     self._start_menu_process(OptionMenu.DISPLAY_ALL_PATIENT_WAITING, DisplayAllPatientsWaitingOption)
                 case MainMenuOption.READ_PATIENT_CONSULTATION_FILE:
-                    pass
+                    self._start_menu_process(OptionMenu.READ_PATIENT_CONSULTATION_FILE , ReadPatientConsultationFileOption)
                 case MainMenuOption.EXIT_APPLICATION:
                     self._exit_application()
         
@@ -157,6 +171,14 @@ class MainMenu(object):
                 case DisplayAllPatientsWaitingOption.DISPLAY:
                     self._display_all_patients_waiting_process()
                 case DisplayAllPatientsWaitingOption.ABORT:
+                    self._abort_menu_process()
+        # ============== Read Patient Consultation File =================
+        if isinstance(menu_option, ReadPatientConsultationFileOption):
+            print()
+            match menu_option:
+                case ReadPatientConsultationFileOption.FILES:
+                    pass
+                case ReadPatientConsultationFileOption.ABORT:
                     self._abort_menu_process()
 
 
@@ -281,7 +303,10 @@ class MainMenu(object):
         print()
     
     # ----------------- Read Patient Consultation File -------------- #
-    #  ---------------------- Exit Application --------------------------- #
+    def _display_patient_consultation_files(self):
+        '''Displays all the consultation file options to be read later on'''
+        
+    # -----------------------  Exit Application --------------------------- #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''
         self._stop_application = True

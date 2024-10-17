@@ -69,6 +69,7 @@ class OptionMenu(Enum):
     ADD_PATIENT_TO_SCHEDULE = auto()
     RETRIEVE_NEXT_PATIENT = auto()
     DISPLAY_ALL_PATIENT_WAITING = auto()
+    READ_PATIENT_CONSULTATION_FILE = auto()
 
 class MenuOption(ExtendedEnum):
     '''Abstract class to ensure type safety of menu options'''
@@ -101,4 +102,9 @@ class RetrieveNextPatientMenuOption(MenuOption):
 class DisplayAllPatientsWaitingOption(MenuOption):
     ''' Enum mapping for the display all patients waiting options'''
     DISPLAY = auto()
+    ABORT = auto()
+
+class ReadPatientConsultationFileOption(MenuOption):
+    '''Enum mapping for the read patient consultation file options'''
+    DISPLAY_FILES = auto()
     ABORT = auto()

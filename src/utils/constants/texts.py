@@ -37,3 +37,8 @@ class STexts():
     display_all_patients_waiting_title = "-- Display All Patients Waiting --"
     display_all_patients_waiting_menu_option_one = "(1) Display"
     display_all_patients_waiting_menu_option_two = "(2) Abort"
+
+    # Read Patient Consultation File
+    read_patient_consultation_file_title = "-- Read Patient Consultation File --"
+    read_patient_consultation_file_menu_option_one = "(1) Display Files"
+    read_patient_consultation_file_menu_option_two = "(2) Abort"
