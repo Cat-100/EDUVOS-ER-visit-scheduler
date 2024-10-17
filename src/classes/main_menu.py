@@ -6,6 +6,7 @@ from typing import List, TypeVar , Type , Optional
 from utils.helpers.helper_functions import SHelperFunctions
 from exceptions.exceptions import AbortProcess
 from utils.validators.validators import SValidators
+from models.file_operation_response import FileOperationResponse 
 
 class MainMenu(object):
     ''' 
@@ -94,38 +95,68 @@ class MainMenu(object):
                 print(STexts.retrieve_next_patient_title)
                 print(STexts.retrieve_next_menu_option_one)
                 print(STexts.retrieve_next_menu_option_two)
+            case OptionMenu.DISPLAY_ALL_PATIENT_WAITING:
+                '''Displays All Patients Waiting '''
+                print(STexts.display_all_patients_waiting_title)
+                print(STexts.display_all_patients_waiting_menu_option_one)
+                print(STexts.display_all_patients_waiting_menu_option_two)
 
-    def _handle_menu_option_selected(self, menu_option: T , patient: Optional[Patient] = None) -> None:
+    def _start_menu_process( self,  option_menu: OptionMenu, menu_option_type: Type[MenuOption]):
+        '''Start menu process based'''
+        self._stop_menu_process = False
+        while not self._stop_menu_process:
+            # Display Patient Menu Options
+            self._display_chosen_option_menu(option_menu)
+
+            # Get menu option
+            menu_option = self._get_menu_choice(menu_option_type , STexts.menu_choice_input)
+            
+            # Handle the menu option selected
+            self._handle_menu_option_selected(menu_option)
+
+    def _handle_menu_option_selected(self, menu_option: T) -> None:
         '''Invokes certain process based on the Main Menu Option provided'''
         # Add spacing for readability
         if isinstance(menu_option, MainMenuOption):
-            # Main Menu Option operations
+            # =========== Main Menu Option operations ============
             match menu_option:
                 case MainMenuOption.ADD_PATIENT_TO_SCHEDULE:
-                    self._start_add_patient_process()
+                    self._start_menu_process(OptionMenu.ADD_PATIENT_TO_SCHEDULE , AddPatientMenuOption)
                 case MainMenuOption.RETRIEVE_NEXT_PATIENT:
-                    self._start_retrieve_next_patient_process()
+                    self._start_menu_process(OptionMenu.RETRIEVE_NEXT_PATIENT , RetrieveNextPatientMenuOption ) 
                 case MainMenuOption.DISPLAY_ALL_PAIENTS_WAITING:
-                    pass
+                    self._start_menu_process(OptionMenu.DISPLAY_ALL_PATIENT_WAITING, DisplayAllPatientsWaitingOption)
                 case MainMenuOption.READ_PATIENT_CONSULTATION_FILE:
                     pass
                 case MainMenuOption.EXIT_APPLICATION:
                     self._exit_application()
+        
+        # ================ Add Patient Menu Options ===============
         if isinstance(menu_option , AddPatientMenuOption):
-            # Add Patient Menu Options
             print()
             match menu_option:
                 case AddPatientMenuOption.ADD_PATIENT:
                     self._add_patient_option()
                 case AddPatientMenuOption.ABORT:
                     self._abort_menu_process()
+
+        # ========= Retrieve and consult patient options ========
         if isinstance(menu_option , RetrieveNextPatientMenuOption):
-            # Retrieve and consult patient options
+           
             print()
             match menu_option:
                 case RetrieveNextPatientMenuOption.RETREIVE_AND_CONSULT_PATIENT:
                     self._retrieve_and_consult_patient()
                 case RetrieveNextPatientMenuOption.ABORT:
+                    self._abort_menu_process()
+
+        # =========== Display All Patients Waiting ==================
+        if isinstance(menu_option ,DisplayAllPatientsWaitingOption ):
+            print()
+            match menu_option:
+                case DisplayAllPatientsWaitingOption.DISPLAY:
+                    self._display_all_patients_waiting_process()
+                case DisplayAllPatientsWaitingOption.ABORT:
                     self._abort_menu_process()
 
 
@@ -208,24 +239,11 @@ class MainMenu(object):
             self._scheduler.add_patient(new_patient) 
             
             # Provide feeback
-            print(f"{STexts.add_patient_success_feedback} {new_patient.name} {new_patient.surname}")
+            print(f"{STexts.add_patient_success_feedback} {new_patient.name} {new_patient.surname}\n")
         except AbortProcess:
             # Handle abort process
             return
         
-    def _start_add_patient_process(self) -> None:
-        '''Starts the Add Patient Process'''
-        self._stop_menu_process = False
-        while not self._stop_menu_process:
-            # Display Patient Menu Options
-            self._display_chosen_option_menu(OptionMenu.ADD_PATIENT_TO_SCHEDULE)
-
-            # Get menu option
-            menu_option : AddPatientMenuOption = self._get_menu_choice(AddPatientMenuOption , STexts.menu_choice_input)
-            
-            # Handle the menu option selected
-            self._handle_menu_option_selected(menu_option)
-
     # -------------------- Retrieve Next Patient ---------------------- #
     def _retrieve_and_consult_patient(self) -> None:
         try:
@@ -233,33 +251,36 @@ class MainMenu(object):
             retrieved_patient = self._scheduler.retrieve_next_patient()
 
             # Display the patient details for the doctor to use and consult the patient
-            print(retrieved_patient.display_details())
-
+            retrieved_patient.display_details()
+            print()
             # Get status.
             patient_status : str  = self._get_patient_info(STexts.patient_status_input)
             if SHelperFunctions.is_empty(patient_status) : raise AbortProcess
 
-            # Add the status to the 
+            # Consult the patient
+            fileOperationResponse : FileOperationResponse = self._scheduler.consult_patient(retrieved_patient , patient_status)
+
+            # Return a message to make sure that the operation was successful
+            match fileOperationResponse.status:
+                case FileOperationalStatus.FAILED:
+                    print(f"Patient consultation was not saved.\nUnexpected error occured. Please try again.\n") 
+                case FileOperationalStatus.STOPPED:
+                    print(f"Patient consultation was not saved. The process was stopped:\n{fileOperationResponse.message}\n")
+                case FileOperationalStatus.SUCCESS:
+                    print(f"Patient consultation was saved successfully\n")
         except AbortProcess:
             # Reinsert the retrieved patient if the process was aborted
             self._scheduler.add_patient(retrieved_patient)
         except IndexError as e:
-            print("No patients available to be consulted.")
+            print(STexts.no_patients_available_to_consult)
             
-
-    def _start_retrieve_next_patient_process(self) -> None:
-        '''Starts the Next Patient process'''
-        self._stop_menu_process = False
-        while not self._stop_menu_process:
-            # Display Patient Menu Options
-            self._display_chosen_option_menu(OptionMenu.RETRIEVE_NEXT_PATIENT)
-
-            # Get menu option
-            menu_option : AddPatientMenuOption = self._get_menu_choice(AddPatientMenuOption , STexts.menu_choice_input)
-            
-            # Handle the menu option selected
-            self._handle_menu_option_selected(menu_option)
-        
+    # ----------------- Display All Patients Waiting ---------------- #
+    def _display_all_patients_waiting_process(self):
+        ''' Display all the patients in the waiting queue '''
+        self._scheduler.display_patients_waiting()
+        print()
+    
+    # ----------------- Read Patient Consultation File -------------- #
     #  ---------------------- Exit Application --------------------------- #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''

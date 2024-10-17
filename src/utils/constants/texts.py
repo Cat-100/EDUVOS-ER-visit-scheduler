@@ -30,4 +30,10 @@ class STexts():
     retrieve_next_patient_title = "-- Retrieve Next Patient --"
     retrieve_next_menu_option_one = "(1) Retrieve and Consult Patient"
     retrieve_next_menu_option_two = "(2) Abort"
-    patient_status_input = "Enter Patient Status(Press Enter to Abort)"
+    patient_status_input = "Enter Patient Status (Press Enter to Abort): "
+    no_patients_available_to_consult = "No patients available to be consulted."
+
+    # Display All Patients Waiting
+    display_all_patients_waiting_title = "-- Display All Patients Waiting --"
+    display_all_patients_waiting_menu_option_one = "(1) Display"
+    display_all_patients_waiting_menu_option_two = "(2) Abort"

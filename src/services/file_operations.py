@@ -22,6 +22,7 @@ class FileOperations:
         - A [FileOperationResponse] to indicate the status of the file operation of writing to a file
         '''
         try:
+            print(f"Debugging:\n{lines[0]}")
             # Create Path object
             file : Path = Path(fileName)
 
