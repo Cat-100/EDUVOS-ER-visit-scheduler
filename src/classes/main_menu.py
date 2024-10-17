@@ -1,6 +1,6 @@
 from utils.enums.enums import MainMenuOption
 from classes.scheduler import Scheduler
-
+from utils.constants.texts import STexts
 
 class MainMenu(object):
     ''' 
@@ -40,13 +40,13 @@ class MainMenu(object):
 
     def _display_main_menu(self) -> None:
         '''Prints the main menu for the user to use and select a option'''
-        print("Clinic ER Visit Scheduler")
+        print(STexts.menu_title)
         print("------------------------------------------")
-        print("(1) Add Patient to Schedule.")
-        print("(2) Retrieve Next Patient.")
-        print("(3) Display All Patients Waiting.")
-        print("(4) Read Patient Consultation File")
-        print("(5) Exit application")
+        print(STexts.first_menu_option)
+        print(STexts.second_menu_option)
+        print(STexts.third_menu_option)
+        print(STexts.fourth_menu_option)
+        print(STexts.fifth_menu_option)
         print()
 
     def _get_user_menu_choice(self) -> MainMenuOption:
