@@ -206,7 +206,9 @@ class MainMenu(object):
             
             # Add patient to the scheduler
             self._scheduler.add_patient(new_patient) 
-        
+            
+            # Provide feeback
+            print(f"{STexts.add_patient_success_feedback} {new_patient.name} {new_patient.surname}")
         except AbortProcess:
             # Handle abort process
             return
