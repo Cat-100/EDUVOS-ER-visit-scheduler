@@ -7,6 +7,8 @@ from utils.helpers.helper_functions import SHelperFunctions
 from exceptions.exceptions import AbortProcess
 from utils.validators.validators import SValidators
 from models.file_operation_response import FileOperationResponse 
+from services.file_operations import FileOperations
+from pathlib import Path
 
 class MainMenu(object):
     ''' 
@@ -178,7 +180,7 @@ class MainMenu(object):
             print()
             match menu_option:
                 case ReadPatientConsultationFileOption.DISPLAY_FILES:
-                    pass
+                    self._display_patient_consultation_files()
                 case ReadPatientConsultationFileOption.ABORT:
                     self._abort_menu_process()
 
@@ -190,7 +192,6 @@ class MainMenu(object):
     
     # =========================== Main Menu Option Functions ============================== #
     #  ---------------------- Add Patient to Schedule --------------------------- #
-
     def _get_patient_info(self, prompt: str) -> str:
         info: str = None
         while info is None:
@@ -304,9 +305,70 @@ class MainMenu(object):
         print()
     
     # ----------------- Read Patient Consultation File -------------- #
+    def _display_patient_consultation_file_menu(self , files) -> str:
+        '''Creates a consultation file menu for the user to select from'''
+        print(STexts.read_patient_consultation_files_menu_title)
+        # Display files to be selected from
+        for file_index in range(len(files)):
+            print(f"{file_index+ 1} -- {files[file_index].name}")
+
+    def _get_file_option(self,files) -> int:
+        '''Gets the file option chosen by the user for a consultation file'''
+        file_option : int = None
+        while file_option is None:
+            file_option_str = input(STexts.consultation_files_input)
+            if SHelperFunctions.is_empty(file_option_str) : raise AbortProcess # Abort if empty
+
+            try:
+                # Attempt to parse the file option
+                file_option = int(file_option_str)
+
+                # Ensure that the option chosen falls in the range of the files
+                if not (1 <= file_option <= len(files)):
+                    raise ValueError
+                
+                # Return the value
+                return file_option
+            except ValueError:
+                # Handle case where the input is not valid or does not fall int the appropriate range
+                print(STexts.consultation_files_invalid_input)
+        
     def _display_patient_consultation_files(self):
         '''Displays all the consultation file options to be read later on'''
+        try:
+            # Construct consultation directory
+            consultation_directory = Path(AppDirectories.CONSULTED_PATIENTS.value)
+
+            # Get the files in the directory
+            files  =  FileOperations.get_files_in_directory(consultation_directory)
+
+            # Display menu
+            self._display_patient_consultation_file_menu(files)
+           
+            # Get user input
+            file_option : int = self._get_file_option(files)
+
+            # Get the file
+            file: Path = Path(files[file_option - 1])
+            fileOperationResponse: FileOperationResponse  = self._scheduler._read_consulted_patients_file(file.absolute())
+
+            # Process the response
+            match fileOperationResponse.status:
+                case FileOperationalStatus.FAILED:
+                    print(f"Could not read patient consultation file, {file.name}: Please try again")
+                case FileOperationalStatus.STOPPED:
+                    print(f"Reading Patient consultation file, {file.name}, was stopped:\n{fileOperationResponse.message}")
+                case FileOperationalStatus.SUCCESS:
+                    # Display payload
+                    print(fileOperationResponse.payload)
+                    print(f"Successfully read patient consultation file, {file.name}:\n\n{fileOperationResponse.payload}")
+        except AbortProcess:
+            # Handle on abort process
+            return
         
+            
+
+
     # -----------------------  Exit Application --------------------------- #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''

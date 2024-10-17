@@ -124,15 +124,6 @@ class Scheduler(object):
 
             # Directory paths match, attempt to read the file
             return self._read_consulted_patients_file(fileName)
-
-            # # Process the response
-            # match fileOperationResponse.status:
-            #     case FileOperationalStatus.FAILED:
-            #         print(f"Could not read patient consultation file, {file.name}: Please try again")
-            #     case FileOperationalStatus.STOPPED:
-            #         print(f"Reading Patient consultation file, {file.name}, was stopped:\n{fileOperationResponse.message}")
-            #     case FileOperationalStatus.SUCCESS:
-            #         print(f"Successfully read patient consultation file, {file.name}:\n\n{fileOperationResponse.payload}")
         except Exception as e:
             # Handle unexpected error
             print(f"Could not read patient consultation file. Unexpected error occured: {e}")
@@ -148,7 +139,7 @@ class Scheduler(object):
         - [FileOperationResponse] to indicate the operation status and the contents of the file.
         '''
         try:
-            return FileOperations.read_from_txt_file(fileName)
+            return FileOperations.read_from_txt_file(fileName) 
         except Exception as e:
             # Handle unexpected error
             return FileOperationResponse(FileOperationalStatus.FAILED, f"Unexpected error occured: {e}")

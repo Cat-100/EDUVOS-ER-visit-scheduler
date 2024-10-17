@@ -42,3 +42,7 @@ class STexts():
     read_patient_consultation_file_title = "-- Read Patient Consultation File --"
     read_patient_consultation_file_menu_option_one = "(1) Display Files"
     read_patient_consultation_file_menu_option_two = "(2) Abort"
+    read_patient_consultation_files_menu_title = "-- Consultation Files --"
+    abort = "Abort"
+    consultation_files_input = "Select a file (Press Enter to Abort): "
+    consultation_files_invalid_input = "Invalid file option. Choose an option from the files provided."

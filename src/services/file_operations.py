@@ -68,9 +68,10 @@ class FileOperations:
                 return FileOperationResponse(FileOperationalStatus.STOPPED , f"Cannot read from from {file.name}. File does not exists." )
         
             # File Exists, attempt to read the file
-            with file.open(FileMode.READ.value , encoding="utf-8") as opendedFile :
-                fileContents = opendedFile.read()
+            fileContents = file.read_text()
             
+            
+            print(f"Debugging: {fileContents}")
             # Return the contents of the file
             return FileOperationResponse(FileOperationalStatus.SUCCESS , f"Successfully read the file. {file.name}" , payload=fileContents)
         except Exception as e:
@@ -110,7 +111,6 @@ class FileOperations:
         - `SUCCESS` will have a payload of List[File]
         '''
         try:
-            print(directory.is_dir())
             # Check if the directory is a directory before proceeding
             if not directory.is_dir():
                 return FileOperationResponse(FileOperationalStatus.STOPPED , message=f"{directory.name} is not a directory.")
@@ -123,7 +123,6 @@ class FileOperations:
                 if file.is_file():
                     files.append(file)
             
-            print(files)
             # Return the files
             return files
         except Exception as e:
