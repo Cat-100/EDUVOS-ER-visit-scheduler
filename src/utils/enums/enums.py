@@ -82,9 +82,6 @@ class MainMenuOption(MenuOption):
 class AddPatientMenuOption(MenuOption):
     ''' Enum mapping for the add patient menu options'''
     # Values
-    SET_NAME_OF_PATIENT = auto()
-    SET_SURNAME_OF_PATIENT = auto()
-    SET_ID_NUMBER_OF_PATIENT = auto()
     ADD_PATIENT = auto()
     ABORT = auto()
         

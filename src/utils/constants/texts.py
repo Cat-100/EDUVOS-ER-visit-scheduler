@@ -15,12 +15,11 @@ class STexts():
     # Application terminated
     application_terminated = "Application successfully terminated"
 
-    # Add Patient to Schedule
+    # Add Patient to Schedul
     add_patient_to_schedule_title = "-- Add Patient to Schedule --"
-    add_patient_menu_option_one = "(1) Set Name of Patient"
-    add_patient_menu_option_two = "(2) Set Surname of Patient"
-    add_patient_menu_option_third = "(3) Set ID number of Patient"
-    add_patient_menu_option_four = "(4) Add Patient"
-    add_patient_menu_abort_option = "(5) Abort"
+    add_patient_menu_option_one = "(1) Add Patient"
+    add_patient_menu_abort_option = "(2) Abort"
     add_patient_abort_process = "Add Patient to Schedule was Aborted..."
+    add_patient_name_input = "Enter Patient Name (Press Enter to Abort): "
+    add_patient_surname_input = "Enter Patient Suranem (Press Enter to Abort): "
 

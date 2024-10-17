@@ -1,8 +1,9 @@
 from utils.enums.enums import MainMenuOption , MenuOption, AddPatientMenuOption
 from classes.scheduler import Scheduler
+from classes.patient import Patient
 from utils.constants.texts import STexts
 from typing import List, TypeVar , Type , Optional
-
+from utils.helpers.helper_functions import SHelperFunctions
 class MainMenu(object):
     ''' 
     Object class that represents the main menu of the ER application. 
@@ -58,6 +59,7 @@ class MainMenu(object):
         print()
 
     def _get_menu_choice(self , menu_type: Type[T] , prompt : str) -> T:
+        '''Get the relative menu option'''
         menu_choice : Optional[T] = None
         while menu_choice is None:
             menu_choice_str =  input(prompt)
@@ -80,7 +82,7 @@ class MainMenu(object):
                 # Handle case where the user provided a input that was not valid
                 print(STexts.menu_choice_invalid_input)
 
-    def _handle_menu_option_selected(self, menu_option: T) -> None:
+    def _handle_menu_option_selected(self, menu_option: T , patient: Optional[Patient] = None) -> None:
         '''Invokes certain process based on the Main Menu Option provided'''
         # Add spacing for readability
         if isinstance(menu_option, MainMenuOption):
@@ -100,14 +102,8 @@ class MainMenu(object):
             # Add Patient Menu Options
             print()
             match menu_option:
-                case AddPatientMenuOption.SET_NAME_OF_PATIENT:
-                    pass
-                case AddPatientMenuOption.SET_SURNAME_OF_PATIENT:
-                    pass
-                case AddPatientMenuOption.SET_ID_NUMBER_OF_PATIENT:
-                    pass
                 case AddPatientMenuOption.ADD_PATIENT:
-                    pass
+                    self._add_patient_option()
                 case AddPatientMenuOption.ABORT:
                     self._abort_add_patient_process()
             
@@ -117,10 +113,30 @@ class MainMenu(object):
         '''Displays a mini menu for adding a patient to the schedule'''
         print(STexts.add_patient_to_schedule_title)
         print(STexts.add_patient_menu_option_one)
-        print(STexts.add_patient_menu_option_two)
-        print(STexts.add_patient_menu_option_third)
-        print(STexts.add_patient_menu_option_four)
         print(STexts.add_patient_menu_abort_option)
+
+    def _get_patient_info(self, prompt: str) -> str:
+        info: str = None
+        while info is None:
+            info = str(input(prompt))
+
+            return info
+
+        
+    #def _get_patient_id_number() -> str:
+
+
+    def _add_patient_option(self) -> None:
+        '''Add the patient being populated to the schedule'''
+        # Get the patient name
+        patient_name : str = self._get_patient_info(STexts.add_patient_name_input)
+        if SHelperFunctions.is_empty(patient_name) == True : return # Abort if empty
+        
+        # Get the Patient Surname
+        patient_surname : str = self._get_patient_info(STexts.add_patient_surname_input)
+        if SHelperFunctions.is_empty(patient_name) == True : return # Abort if empty
+
+        # Get Patient ID Number 
 
     def _abort_add_patient_process(self) -> None:
         '''Aborts the Add Patient Process'''
