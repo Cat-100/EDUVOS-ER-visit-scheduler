@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from typing import Any , Dict
+from abc import ABC
 
 class ExtendedEnum(Enum):
     '''Extended Abstract Enum class to enable additional methods on enums'''
@@ -61,7 +62,12 @@ class FileExtension(Enum):
     # Values
     TXT = ".txt"
 
-class MainMenuOption(ExtendedEnum):
+# ========================= Menu Options ============================== #
+class MenuOption(ExtendedEnum):
+    '''Abstract class to ensure type safety of menu options'''
+    pass
+
+class MainMenuOption(MenuOption):
     '''
     Enum mapping to the main menu options. 
     Ensuring type safety when parsing and working with menu options
@@ -73,24 +79,13 @@ class MainMenuOption(ExtendedEnum):
     READ_PATIENT_CONSULTATION_FILE = auto()
     EXIT_APPLICATION = auto()
 
-    @classmethod
-    def from_int(cls, value: int) -> Any:
-        ''' 
-        Map function that returns the corresponding value from the provided int.
-        
-        **Parameter:**
-        - `value`: The value of the Enum provided that will be mapped.
-
-        **Returns:**
-        - The value of an enum, for example FileMode
-        '''
-
-        if value < 1 or value > len(cls):
-            return None # Return None as int value is out-of-bounds of the enum
-        
-        for classValue in cls:
-            if (value == classValue.value):
-                return classValue
-
+class AddPatientMenuOption(MenuOption):
+    ''' Enum mapping for the add patient menu options'''
+    # Values
+    SET_NAME_OF_PATIENT = auto()
+    SET_SURNAME_OF_PATIENT = auto()
+    SET_ID_NUMBER_OF_PATIENT = auto()
+    ADD_PATIENT = auto()
+    ABORT = auto()
         
 

@@ -1,8 +1,26 @@
 class STexts():
     '''Utility class that holds all the texts for the application'''
+    # Menu
     menu_title : str= "Clinic ER Visit Scheduler" 
     first_menu_option : str = "(1) Add Patient to Schedule."
     second_menu_option : str = "(2) Retrieve Next Patient."
     third_menu_option :str = "(3) Display All Patients Waiting."
     fourth_menu_option : str = "(4) Read Patient Consultation File"
     fifth_menu_option : str  ="(5) Exit application"
+
+    # Menu inputs
+    menu_choice_input =  "Please selected an option from the menu: "
+    menu_choice_invalid_input = "Invalid Input. Please select an option from the menu.\nEx. 1"
+
+    # Application terminated
+    application_terminated = "Application successfully terminated"
+
+    # Add Patient to Schedule
+    add_patient_to_schedule_title = "-- Add Patient to Schedule --"
+    add_patient_menu_option_one = "(1) Set Name of Patient"
+    add_patient_menu_option_two = "(2) Set Surname of Patient"
+    add_patient_menu_option_third = "(3) Set ID number of Patient"
+    add_patient_menu_option_four = "(4) Add Patient"
+    add_patient_menu_abort_option = "(5) Abort"
+    add_patient_abort_process = "Add Patient to Schedule was Aborted..."
+

@@ -1,6 +1,7 @@
-from utils.enums.enums import MainMenuOption
+from utils.enums.enums import MainMenuOption , MenuOption, AddPatientMenuOption
 from classes.scheduler import Scheduler
 from utils.constants.texts import STexts
+from typing import List, TypeVar , Type , Optional
 
 class MainMenu(object):
     ''' 
@@ -18,11 +19,16 @@ class MainMenu(object):
     - `_scheduler`: The [scheduler] object that manages the priority queue of patients.
     '''
 
+    # Setup
+    # Generics
+    T = TypeVar('T' , bound=MenuOption)
+    
     # --------------------------- Functions ----------------------------- #
 
     def __init__(self) -> None:
         '''Constructor for the class'''
         self._stop_application = False 
+        self._stop_add_patient_process = False
         self._scheduler = Scheduler()
 
     def start(self):
@@ -33,10 +39,12 @@ class MainMenu(object):
             self._display_main_menu()
 
             # Get User Choice
-            menu_option_made : MainMenuOption = self._get_user_menu_choice() 
+            menu_option_made : MainMenuOption = self._get_menu_choice(MainMenuOption , STexts.menu_choice_input) 
 
             # Handle the user choice made
             self._handle_menu_option_selected(menu_option_made)
+
+            
 
     def _display_main_menu(self) -> None:
         '''Prints the main menu for the user to use and select a option'''
@@ -49,17 +57,17 @@ class MainMenu(object):
         print(STexts.fifth_menu_option)
         print()
 
-    def _get_user_menu_choice(self) -> MainMenuOption:
-        menu_choice : MainMenuOption = None
-        while menu_choice == None:
-            menu_choice_str =  input("Please selected an option from the menu: ")
+    def _get_menu_choice(self , menu_type: Type[T] , prompt : str) -> T:
+        menu_choice : Optional[T] = None
+        while menu_choice is None:
+            menu_choice_str =  input(prompt)
             
             try:
                 # Attempt to convert input to an int and get the correct Menu Option
                 menu_choice = int(menu_choice_str)
             
                 # Convert int choice to enum value
-                menu_choice = MainMenuOption.from_value(menu_choice)
+                menu_choice = menu_type.from_value(menu_choice)
 
                 # Handle edge case where the value is not in the range of the options provided
                 if menu_choice is None:
@@ -70,24 +78,72 @@ class MainMenu(object):
 
             except ValueError:
                 # Handle case where the user provided a input that was not valid
-                print("Invalid Input. Please select an option from the menu as a number.\nEx. 1")
+                print(STexts.menu_choice_invalid_input)
 
-    def _handle_menu_option_selected(self, menu_option: MainMenuOption) -> None:
+    def _handle_menu_option_selected(self, menu_option: T) -> None:
         '''Invokes certain process based on the Main Menu Option provided'''
-        match menu_option:
-            case MainMenuOption.ADD_PATIENT_TO_SCHEDULE:
-                pass
-            case MainMenuOption.RETRIEVE_NEXT_PATIENT:
-                pass
-            case MainMenuOption.DISPLAY_ALL_PAIENTS_WAITING:
-                pass
-            case MainMenuOption.READ_PATIENT_CONSULTATION_FILE:
-                pass
-            case MainMenuOption.EXIT_APPLICATION:
-                self._exit_application()
-          
+        # Add spacing for readability
+        if isinstance(menu_option, MainMenuOption):
+            # Main Menu Option operations
+            match menu_option:
+                case MainMenuOption.ADD_PATIENT_TO_SCHEDULE:
+                    self._start_add_patient_process()
+                case MainMenuOption.RETRIEVE_NEXT_PATIENT:
+                    pass
+                case MainMenuOption.DISPLAY_ALL_PAIENTS_WAITING:
+                    pass
+                case MainMenuOption.READ_PATIENT_CONSULTATION_FILE:
+                    pass
+                case MainMenuOption.EXIT_APPLICATION:
+                    self._exit_application()
+        if isinstance(menu_option , AddPatientMenuOption):
+            # Add Patient Menu Options
+            print()
+            match menu_option:
+                case AddPatientMenuOption.SET_NAME_OF_PATIENT:
+                    pass
+                case AddPatientMenuOption.SET_SURNAME_OF_PATIENT:
+                    pass
+                case AddPatientMenuOption.SET_ID_NUMBER_OF_PATIENT:
+                    pass
+                case AddPatientMenuOption.ADD_PATIENT:
+                    pass
+                case AddPatientMenuOption.ABORT:
+                    self._abort_add_patient_process()
+            
     # =========================== Main Menu Option Functions ============================== #
+    #  ------------------------------ Add Patient to Schedule --------------------------- #
+    def _display_add_patient_to_schedule_menu(self) -> None:
+        '''Displays a mini menu for adding a patient to the schedule'''
+        print(STexts.add_patient_to_schedule_title)
+        print(STexts.add_patient_menu_option_one)
+        print(STexts.add_patient_menu_option_two)
+        print(STexts.add_patient_menu_option_third)
+        print(STexts.add_patient_menu_option_four)
+        print(STexts.add_patient_menu_abort_option)
+
+    def _abort_add_patient_process(self) -> None:
+        '''Aborts the Add Patient Process'''
+        self._stop_add_patient_process = True
+        print(STexts.add_patient_abort_process)
+
+    def _start_add_patient_process(self) -> None:
+        '''Starts the Add Patient Process'''
+        # Declare global to handle the patient process
+        self._stop_add_patient_process = False
+        while not self._stop_add_patient_process:
+            # Display Patient Menu Options
+            self._display_add_patient_to_schedule_menu()
+
+            # Get menu option
+            menu_option : AddPatientMenuOption = self._get_menu_choice(AddPatientMenuOption , STexts.menu_choice_input)
+            
+            # Handle the menu option selected
+            self._handle_menu_option_selected(menu_option)
+
+    #  ------------------------------ Exit Application --------------------------- #
     def _exit_application(self):
         '''Terminates the application by setting the sentinal'''
         self._stop_application = True
-        print("Application successfully terminated")
+        print(STexts.application_terminated)
+    
