@@ -124,7 +124,7 @@ class MainMenu(object):
             print()
             match menu_option:
                 case RetrieveNextPatientMenuOption.RETREIVE_AND_CONSULT_PATIENT:
-                    pass
+                    self._retrieve_and_consult_patient()
                 case RetrieveNextPatientMenuOption.ABORT:
                     self._abort_menu_process()
 
@@ -163,6 +163,26 @@ class MainMenu(object):
                 # Return patient id if the id is valid
                 return patient_id
 
+    def _get_patient_priority_level(self) -> int:
+        patient_priority_level : int = None
+        while patient_priority_level is None:
+            # Get the Patient Priority Level
+            patient_priority_level_str =  input(STexts.add_patient_priority_level_input)
+            if SHelperFunctions.is_empty(patient_priority_level_str) : raise AbortProcess # Abort process if empty
+            
+            # Attempt to parse value
+            try:
+                patient_priority_level = int(patient_priority_level_str)
+
+                # Validate the priority level
+                if not( 1 <= patient_priority_level <= 5):
+                    raise ValueError
+
+                return patient_priority_level
+            except ValueError as e:
+                print("Invalid Priority level. Enter a number between 1 - 5")
+                patient_priority_level = None            
+            
 
     def _add_patient_option(self) -> None:
         '''Add the patient being populated to the schedule'''
@@ -178,8 +198,11 @@ class MainMenu(object):
             # Get Patient ID Number 
             patient_id : str = self._get_patient_id_number()
             
+            # Assign Patient priority level
+            patient_priority_level : int = self._get_patient_priority_level()
+
             # Consturct Patient Object
-            new_patient : Patient = Patient(patient_name , patient_surname, patient_id)
+            new_patient : Patient = Patient(patient_name , patient_surname, patient_id, patient_priority_level)
             
             # Add patient to the scheduler
             self._scheduler.add_patient(new_patient) 

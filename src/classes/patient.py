@@ -12,12 +12,12 @@ class Patient(object):
 
     # --------------------------- Functions ---------------------------------- #
 
-    def __init__(self , patientName : str, patientSurname: str, patientIdNumber: str) -> None:
+    def __init__(self , patientName : str, patientSurname: str, patientIdNumber: str , priorityLevel: int) -> None:
         ''' Class Constructor '''
         self.name: str = patientName
         self.surname : str = patientSurname
         self.idNumber: str = patientIdNumber
-        self.priorityLevel : int = None
+        self.priorityLevel : int = priorityLevel
         self.status : str = ""
 
     def display_details(self):
