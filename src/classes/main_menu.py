@@ -4,6 +4,8 @@ from classes.patient import Patient
 from utils.constants.texts import STexts
 from typing import List, TypeVar , Type , Optional
 from utils.helpers.helper_functions import SHelperFunctions
+from exceptions.exceptions import AbortProcess
+
 class MainMenu(object):
     ''' 
     Object class that represents the main menu of the ER application. 
@@ -124,26 +126,35 @@ class MainMenu(object):
 
         
     def _get_patient_id_number(self) -> str:
-        # Get the Patient ID
-        patient_id = self._get_patient_info(STexts.add_patient_id_input)
-        if SHelperFunctions.is_empty(patient_id) == True : return ""
-        # Validate if the id number is correct
+        patient_id : str = None
+        while patient_id is None:
+            # Get the Patient ID
+            patient_id =  input(STexts.add_patient_id_input)
+            if SHelperFunctions.is_empty(patient_id) : raise AbortProcess # Abort process if empty
+            
+            # Validate if the id number is correct
+
 
 
     def _add_patient_option(self) -> None:
         '''Add the patient being populated to the schedule'''
-        # Get the patient name
-        patient_name : str = self._get_patient_info(STexts.add_patient_name_input)
-        if SHelperFunctions.is_empty(patient_name) == True : return # Abort if empty
-        
-        # Get the Patient Surname
-        patient_surname : str = self._get_patient_info(STexts.add_patient_surname_input)
-        if SHelperFunctions.is_empty(patient_name) == True : return # Abort if empty
+        try:
+            # Get the patient name
+            patient_name : str = self._get_patient_info(STexts.add_patient_name_input)
+            if SHelperFunctions.is_empty(patient_name) == True : raise AbortProcess # Abort if empty
+            
+            # Get the Patient Surname
+            patient_surname : str = self._get_patient_info(STexts.add_patient_surname_input)
+            if SHelperFunctions.is_empty(patient_name) == True : raise AbortProcess # Abort if empty
 
-        # Get Patient ID Number 
-        patient_id : str = self._get_patient_id_number()
-        if SHelperFunctions.is_empty(patient_id) == True : return ""
+            # Get Patient ID Number 
+            patient_id : str = self._get_patient_id_number()
+            if SHelperFunctions.is_empty(patient_id) == True : return ""
         
+        except AbortProcess:
+            # Handle abort process
+            return
+
     def _abort_add_patient_process(self) -> None:
         '''Aborts the Add Patient Process'''
         self._stop_add_patient_process = True
