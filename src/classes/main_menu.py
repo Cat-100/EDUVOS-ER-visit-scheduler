@@ -172,11 +172,12 @@ class MainMenu(object):
                     self._display_all_patients_waiting_process()
                 case DisplayAllPatientsWaitingOption.ABORT:
                     self._abort_menu_process()
+
         # ============== Read Patient Consultation File =================
         if isinstance(menu_option, ReadPatientConsultationFileOption):
             print()
             match menu_option:
-                case ReadPatientConsultationFileOption.FILES:
+                case ReadPatientConsultationFileOption.DISPLAY_FILES:
                     pass
                 case ReadPatientConsultationFileOption.ABORT:
                     self._abort_menu_process()

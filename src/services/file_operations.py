@@ -96,3 +96,36 @@ class FileOperations:
         fileDirectoryPath : Path = filePath.parent
 
         return rootDirectory == fileDirectoryPath
+    
+    @staticmethod
+    def get_files_in_directory(directory : Path) -> FileOperationResponse:
+        ''' 
+        Returns all files in a directory
+        
+        **Parameters:**
+        - `directory`: The Path that will be used to iterate the files in the directory.
+
+        **Returns:**
+        - `FileOperationalResponse` to indicate if the operation was successful or correct.
+        - `SUCCESS` will have a payload of List[File]
+        '''
+        try:
+            print(directory.is_dir())
+            # Check if the directory is a directory before proceeding
+            if not directory.is_dir():
+                return FileOperationResponse(FileOperationalStatus.STOPPED , message=f"{directory.name} is not a directory.")
+            
+            # Create empty list of files to store
+            files = []
+
+            # iterate through the directory
+            for file in directory.iterdir():
+                if file.is_file():
+                    files.append(file)
+            
+            print(files)
+            # Return the files
+            return files
+        except Exception as e:
+            return FileOperationResponse(FileOperationalStatus.FAILED , message=f"Unexpected error: {e}")
+        
