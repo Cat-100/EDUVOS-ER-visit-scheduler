@@ -48,7 +48,6 @@ class SValidators:
             return "Invalid ID number. Enter an ID of 13 digits"
     
         # Check birthday as last check
-        
         # Get month
         month : int = int(id_number[2:4])
         # Check month validity
